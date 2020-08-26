@@ -1,4 +1,4 @@
-import random   # The random library
+import random  # The random library
 
 
 class bcolors:  # Preset colour codes
@@ -6,13 +6,13 @@ class bcolors:  # Preset colour codes
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
-    FAIL = '\033[91m'   # Red
-    ENDC = '\033[0m'    # This is concatenated after the text (the others come before the text)
-    BOLD = '\033[1m'   # Bolded text
+    FAIL = '\033[91m'  # Red
+    ENDC = '\033[0m'  # This is concatenated after the text (the others come before the text)
+    BOLD = '\033[1m'  # Bolded text
     UNDERLINE = '\033[4m'
 
 
-class Person:   # The person class has the following attributes:
+class Person:  # The person class has the following attributes:
     # (Max)HP, (Max)MP, Attack(between 2 limits), Defense, (A list of spells)Magic, (A list of 2 strings)Actions
     def __init__(self, name, hp, mp, atk, df, magic, items):
         self.name = name
@@ -41,28 +41,28 @@ class Person:   # The person class has the following attributes:
         if self.hp > self.maxhp:
             self.hp = self.maxhp
 
-    def get_maxhp(self):    # Max HP getter
+    def get_maxhp(self):  # Max HP getter
         return self.maxhp
 
-    def get_hp(self):   # HP getter
+    def get_hp(self):  # HP getter
         return self.hp
 
-    def get_maxmp(self):    # Max MP getter
+    def get_maxmp(self):  # Max MP getter
         return self.maxmp
 
-    def get_mp(self):   # MP getter
+    def get_mp(self):  # MP getter
         return self.mp
 
     def reduce_mp(self, cost):  # Returns the remaining MP after casting a spell
         self.mp -= cost
 
-    def get_spell_name(self, i):    # Returns the 'i''s spell NAME in the 'magic' list
+    def get_spell_name(self, i):  # Returns the 'i''s spell NAME in the 'magic' list
         return self.magic[i]["name"]
 
-    def get_spell_mp_cost(self, i):    # Returns the 'i''s spell COST in the 'magic' list
+    def get_spell_mp_cost(self, i):  # Returns the 'i''s spell COST in the 'magic' list
         return self.magic[i]["cost"]
 
-    def choose_action(self):    # Prints the available items in the 'action' list: Attack & Magic
+    def choose_action(self):  # Prints the available items in the 'action' list: Attack & Magic
         i = 1
         print("\n" + bcolors.OKBLUE + "ACTIONS\n" + bcolors.ENDC)
         for action in self.actions:
@@ -170,3 +170,12 @@ class Person:   # The person class has the following attributes:
 
         choice = int(input("Choose a target: ")) - 1
         return choice
+
+    def choose_enemy_spell(self):
+        magic_choice = random.randrange(0, len(self.magic) - 1)
+        spell = self.magic[magic_choice]
+
+        if self.mp < spell.cost or spell.type == "white" and self.hp / self.maxhp > 0.5:
+            self.choose_enemy_spell()
+        else:
+            return spell
